@@ -1,9 +1,6 @@
 package tech.celtrix.avis.controleur;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import javax.naming.AuthenticationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import tech.celtrix.avis.login.dto.AuthentificationDTO;
 import tech.celtrix.avis.login.entite.User;
 import tech.celtrix.avis.login.jwt.JwtService;
@@ -34,6 +31,7 @@ public class UtilisationController {
   private UserService UserService;
   private JwtService jwtService;
 
+  /* 
   @PostMapping(path = "signup")
   public ResponseEntity<Map<String, Object>> inscription(
     @RequestBody User User
@@ -57,6 +55,13 @@ public class UtilisationController {
     );
 
     return new ResponseEntity<>(responseMap, httpStatus);
+  }
+*/
+  @PostMapping(path = "signup")
+  public ResponseEntity<Map<String, String>> inscription(@RequestBody User user) {
+    log.info("Inscrizione");
+
+    return this.UserService.registrazioneUtente(user);
   }
 
   @PostMapping(path = "signin")
@@ -87,9 +92,7 @@ public class UtilisationController {
       //String message = e.getClass().getSimpleName(); // Usa il nome dell'eccezione come messaggio
       return ResponseEntity
         .status(status)
-        .body(
-          Map.of("status", status.value(), "message", "Reset la Password")
-        );
+        .body(Map.of("status", status.value(), "message", "Reset la Password"));
     } catch (Exception e) {
       HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
       return ResponseEntity
@@ -147,7 +150,7 @@ try {
 }
   }
 */
-
+/*
   //attivare utilisatore
   @PostMapping(path = "otp")
   public ResponseEntity<Map<String, Object>> activation(
@@ -176,15 +179,18 @@ try {
         .body(errorResponse);
     }
   }
+  */
 
+
+  
   //cambio password
-  @PostMapping(path = "cpassword")
+  @PostMapping(path = "m-password")
   public void modifierMotDePasse(@RequestBody Map<String, String> activation) {
     this.UserService.modifierMotDePasse(activation);
   }
 
   //nuovo password
-  @PostMapping(path = "npassword")
+  @PostMapping(path = "n-password")
   public void nouveauMotDePasse(@RequestBody Map<String, String> activation) {
     this.UserService.nouveauMotDePasse(activation);
   }

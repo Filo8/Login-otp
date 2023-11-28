@@ -2,25 +2,24 @@ package tech.celtrix.avis.login.service;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
+
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.server.ResponseStatusException;
+
+
+import lombok.AllArgsConstructor;
 import tech.celtrix.avis.TypeDeRole;
 import tech.celtrix.avis.login.entite.Role;
 import tech.celtrix.avis.login.entite.User;
 import tech.celtrix.avis.login.entite.Validation;
 import tech.celtrix.avis.login.repository.UserRepository;
 import tech.celtrix.avis.util.TemporaryPasswordGenerator;
-
+import java.util.HashMap;
 @AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
@@ -29,38 +28,55 @@ public class UserService implements UserDetailsService {
   private ValidationService validationService;
   private TemporaryPasswordGenerator temporaryPasswordGenerator;
 
-  // ...
+  
+public ResponseEntity<Map<String, String>> registrazioneUtente(User utente) {
+    final String PATTERN_EMAIL = "^[A-Za-z0-9+_.-]+@(.+)$";
 
-  public void inscription(User User) {
-    final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
+    Map<String, String> response = new HashMap<>();
 
-    String email = User.getEmail();
-
-    if (!email.matches(EMAIL_PATTERN)) {
-      throw new ResponseStatusException(
-        HttpStatus.BAD_REQUEST,
-        "Indirizzo email non valido"
-      );
+    // Validazione dell'indirizzo email
+    String email = utente.getEmail();
+    if (!email.matches(PATTERN_EMAIL)) {
+        response.put("status", "400");
+        response.put("error", "Indirizzo email non valido");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    // Verifica se l'indirizzo email è già registrato
     if (userRepository.findByEmail(email).isPresent()) {
-      throw new ResponseStatusException(
-        HttpStatus.FORBIDDEN,
-        "Indirizzo email già registrato"
-      );
+        response.put("status", "403");
+        response.put("error", "Indirizzo email già registrato");
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
-    //CryptPassword
-    String mdpCrypte = passwordEncoder.encode(User.getMdp());
-    User.setMdp(mdpCrypte);
+    try {
+        // Crittografia della password
+        String passwordCifrata = passwordEncoder.encode(utente.getMdp());
+        utente.setMdp(passwordCifrata);
 
-    Role roleUser = new Role();
-    roleUser.setLibelle(TypeDeRole.User);
-    User.setRole(roleUser);
+        // Assegnamento del ruolo utente
+        Role ruoloUtente = new Role();
+        ruoloUtente.setLibelle(TypeDeRole.User);
+        utente.setRole(ruoloUtente);
 
-    User = userRepository.save(User);
-    validationService.enregistrer(User);
-  }
+        // Salvataggio dell'utente nel repository
+        userRepository.save(utente);
+
+        // Esecuzione del servizio di validazione
+        validationService.registra(utente);
+
+        // Restituisci un messaggio di successo
+        response.put("status", "201");
+        response.put("message", "Registrazione avvenuta con successo!");
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    } catch (Exception e) {
+        // In caso di errore, restituisci un'eccezione con un messaggio appropriato
+        response.put("status", "500");
+        response.put("error", "Errore durante la registrazione: " + e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 
   public void activation(Map<String, String> activation) {
     Validation validation =
@@ -86,7 +102,7 @@ public class UserService implements UserDetailsService {
 
   public void modifierMotDePasse(Map<String, String> parametres) {
     User User = this.loadUserByUsername(parametres.get("email"));
-    this.validationService.enregistrer(User);
+    this.validationService.registra(User);
   }
 
   public void nouveauMotDePasse(Map<String, String> parametres) {

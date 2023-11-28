@@ -2,8 +2,8 @@ version: '3.1'
 
 services:
   db:
-    container_name: mysql-8.0.28-jammy
-    image: mysql:8.0.28-jammy
+    container_name: mysql-8.0.28
+    image: mysql:8.0.28
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin

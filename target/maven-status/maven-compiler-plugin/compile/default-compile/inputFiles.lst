@@ -5,6 +5,7 @@ C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\s
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\controleur\UtilisationController.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\repository\JwtRepository.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\security\ConfigurationCryptageMotDePasse.java
+C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\security\ConfigurationSecuriteApplication.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\entite\Validation.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\entite\RefreshToken.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\service\UserService.java
@@ -22,4 +23,3 @@ C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\TypeDeR
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\repository\AvisRepository.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\repository\ValidationRepository.java
 C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\login\repository\UserRepository.java
-C:\www\Dev_Par-tec\SPRING BOOT\Login-otp\src\main\java\tech\celtrix\avis\securite\ConfigurationSecuriteApplication.java

@@ -3,7 +3,6 @@ package tech.celtrix.avis.login.service;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
@@ -24,7 +23,6 @@ import tech.celtrix.avis.login.repository.ValidationRepository;
 @AllArgsConstructor
 @Service
 public class ValidationService {
-
   private ValidationRepository validationRepository;
   private NotificationService notificationService;
 
@@ -58,7 +56,11 @@ public class ValidationService {
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch (Exception e) {
       log.error("Errore durante la registrazione dell'utente", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la registrazione dell'utente", e);
+      throw new ResponseStatusException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Errore durante la registrazione dell'utente",
+        e
+      );
     }
   }
 
@@ -74,7 +76,11 @@ public class ValidationService {
       return String.format("%06d", randomInteger);
     } catch (Exception e) {
       log.error("Errore durante la generazione del codice di validazione", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la generazione del codice di validazione", e);
+      throw new ResponseStatusException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Errore durante la generazione del codice di validazione",
+        e
+      );
     }
   }
 
@@ -87,13 +93,19 @@ public class ValidationService {
    */
   public Validation lireEnFonctionDuCode(String code) {
     return this.validationRepository.findByCode(code)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Codice di validazione non valido"));
+      .orElseThrow(
+        () ->
+          new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Codice di validazione non valido"
+          )
+      );
   }
 
   /**
    * Schedulato per eseguire la pulizia della tabella ogni 3 secondi.
    */
-  @Scheduled(cron = "*/40 * * * * *")
+  @Scheduled(cron = "*/30 * * * * *")
   public void nettoyerTable() {
     try {
       final Instant now = Instant.now();
@@ -101,7 +113,11 @@ public class ValidationService {
       this.validationRepository.deleteAllByExpirationBefore(now);
     } catch (Exception e) {
       log.error("Errore durante la pulizia della tabella delle validazioni", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la pulizia della tabella delle validazioni", e);
+      throw new ResponseStatusException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Errore durante la pulizia della tabella delle validazioni",
+        e
+      );
     }
   }
 }

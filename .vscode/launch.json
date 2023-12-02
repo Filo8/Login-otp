@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-AvisUsersApplication<avis-Users>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "tech.celtrix.avis.AvisUsersApplication",
+      "projectName": "avis-Users",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

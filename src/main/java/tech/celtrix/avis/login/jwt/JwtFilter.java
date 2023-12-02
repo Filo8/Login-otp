@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tech.celtrix.avis.login.entite.Jwt;
-import tech.celtrix.avis.login.entite.User;
 import tech.celtrix.avis.login.service.UserService;
 
 @Service

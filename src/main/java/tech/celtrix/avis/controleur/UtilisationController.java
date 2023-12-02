@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import tech.celtrix.avis.login.dto.AuthentificationDTO;
 import tech.celtrix.avis.login.entite.User;
 import tech.celtrix.avis.login.jwt.JwtService;
@@ -58,7 +57,9 @@ public class UtilisationController {
   }
 */
   @PostMapping(path = "signup")
-  public ResponseEntity<Map<String, String>> inscription(@RequestBody User user) {
+  public ResponseEntity<Map<String, String>> inscription(
+    @RequestBody User user
+  ) {
     log.info("Inscrizione");
 
     return this.UserService.registrazioneUtente(user);
@@ -150,7 +151,7 @@ try {
 }
   }
 */
-/*
+  /*
   //attivare utilisatore
   @PostMapping(path = "otp")
   public ResponseEntity<Map<String, Object>> activation(
@@ -181,8 +182,6 @@ try {
   }
   */
 
-
-  
   //cambio password
   @PostMapping(path = "m-password")
   public void modifierMotDePasse(@RequestBody Map<String, String> activation) {
@@ -192,7 +191,7 @@ try {
   //nuovo password
   @PostMapping(path = "n-password")
   public void nouveauMotDePasse(@RequestBody Map<String, String> activation) {
-    this.UserService.nouveauMotDePasse(activation);
+    this.UserService.newPassword(activation);
   }
 
   @PostMapping(path = "refresh-token")
